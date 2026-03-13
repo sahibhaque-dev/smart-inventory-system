@@ -1,0 +1,305 @@
+#include<stdio.h>
+#include<string.h>
+
+struct product{
+    int id;
+    char name[50];
+    float price;
+    int quantity;
+};
+
+struct product p[100];
+
+int count=0;
+float totalSales=0;
+
+void addProduct(){
+
+    printf("\nEnter Product ID: ");
+    scanf("%d",&p[count].id);
+
+    printf("Enter Product Name: ");
+    scanf("%s",p[count].name);
+
+    printf("Enter Price: ");
+    scanf("%f",&p[count].price);
+
+    printf("Enter Quantity: ");
+    scanf("%d",&p[count].quantity);
+
+    count++;
+
+    printf("Product Added Successfully\n");
+}
+
+void viewProduct(){
+
+    printf("\nID\tName\tPrice\tQty\n");
+
+    for(int i=0;i<count;i++){
+
+        printf("%d\t%s\t%.2f\t%d\n",
+        p[i].id,p[i].name,p[i].price,p[i].quantity);
+    }
+}
+
+void sellProduct(){
+
+    int id,qty;
+
+    printf("Enter Product ID: ");
+    scanf("%d",&id);
+
+    printf("Enter Quantity: ");
+    scanf("%d",&qty);
+
+    for(int i=0;i<count;i++){
+
+        if(p[i].id==id){
+
+            if(p[i].quantity>=qty){
+
+                p[i].quantity -= qty;
+
+                float bill = qty * p[i].price;
+
+                totalSales += bill;
+
+                printf("Total Bill = %.2f\n",bill);
+
+            }
+            else{
+
+                printf("Not enough stock\n");
+            }
+
+            return;
+        }
+    }
+
+    printf("Product not found\n");
+}
+
+void returnProduct(){
+
+    int id,qty;
+
+    printf("Enter Product ID: ");
+    scanf("%d",&id);
+
+    printf("Return Quantity: ");
+    scanf("%d",&qty);
+
+    for(int i=0;i<count;i++){
+
+        if(p[i].id==id){
+
+            p[i].quantity += qty;
+
+            printf("Product Returned Successfully\n");
+
+            return;
+        }
+    }
+
+    printf("Product not found\n");
+}
+
+void deleteProduct(){
+
+    int id;
+
+    printf("Enter Product ID to delete: ");
+    scanf("%d",&id);
+
+    for(int i=0;i<count;i++){
+
+        if(p[i].id==id){
+
+            for(int j=i;j<count-1;j++){
+
+                p[j]=p[j+1];
+            }
+
+            count--;
+
+            printf("Product Deleted\n");
+
+            return;
+        }
+    }
+
+    printf("Product not found\n");
+}
+
+void updateStock(){
+
+    int id,newQty;
+
+    printf("Enter Product ID: ");
+    scanf("%d",&id);
+
+    printf("Enter New Quantity: ");
+    scanf("%d",&newQty);
+
+    for(int i=0;i<count;i++){
+
+        if(p[i].id==id){
+
+            p[i].quantity=newQty;
+
+            printf("Stock Updated\n");
+
+            return;
+        }
+    }
+
+    printf("Product not found\n");
+}
+
+void lowStock(){
+
+    printf("\nLOW STOCK PRODUCTS\n");
+
+    for(int i=0;i<count;i++){
+
+        if(p[i].quantity<5){
+
+            printf("%s LOW STOCK (Qty:%d)\n",
+            p[i].name,p[i].quantity);
+        }
+    }
+}
+
+void salesReport(){
+
+    printf("\nTotal Sales = %.2f\n",totalSales);
+}
+
+void adminMenu(){
+
+    int ch;
+
+    do{
+
+        printf("\n--- ADMIN MENU ---\n");
+
+        printf("1 Add Product\n");
+        printf("2 View Products\n");
+        printf("3 Delete Product\n");
+        printf("4 Update Stock\n");
+        printf("5 Low Stock Warning\n");
+        printf("6 Total Sales Report\n");
+        printf("7 Logout\n");
+
+        printf("Enter choice: ");
+        scanf("%d",&ch);
+
+        switch(ch){
+
+        case 1:
+            addProduct();
+            break;
+
+        case 2:
+            viewProduct();
+            break;
+
+        case 3:
+            deleteProduct();
+            break;
+
+        case 4:
+            updateStock();
+            break;
+
+        case 5:
+            lowStock();
+            break;
+
+        case 6:
+            salesReport();
+            break;
+        }
+
+    }while(ch!=7);
+}
+
+void userMenu(){
+
+    int ch;
+
+    do{
+
+        printf("\n--- USER MENU ---\n");
+
+        printf("1 View Products\n");
+        printf("2 Sell Product\n");
+        printf("3 Return Product\n");
+        printf("4 Logout\n");
+
+        printf("Enter choice: ");
+        scanf("%d",&ch);
+
+        switch(ch){
+
+        case 1:
+            viewProduct();
+            break;
+
+        case 2:
+            sellProduct();
+            break;
+
+        case 3:
+            returnProduct();
+            break;
+        }
+
+    }while(ch!=4);
+}
+
+int main(){
+
+    int choice;
+    char user[20],pass[20];
+
+    do{
+
+        printf("\n==== LOGIN SYSTEM ====\n");
+
+        printf("1 Admin Login\n");
+        printf("2 User Login\n");
+        printf("3 Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d",&choice);
+
+        if(choice==1){
+
+            printf("Username: ");
+            scanf("%s",user);
+
+            printf("Password: ");
+            scanf("%s",pass);
+
+            if(strcmp(user,"admin")==0 && strcmp(pass,"1234")==0){
+
+                adminMenu();
+
+            }
+            else{
+
+                printf("Wrong Login\n");
+            }
+        }
+
+        else if(choice==2){
+
+            userMenu();
+        }
+
+    }while(choice!=3);
+
+    return 0;
+}
