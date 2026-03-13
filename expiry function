@@ -1,0 +1,30 @@
+void expiryWarning()
+{
+    int i;
+    int todayDay, todayMonth, todayYear;
+
+    printf("Enter Today Date\n");
+    printf("Day: ");
+    scanf("%d",&todayDay);
+
+    printf("Month: ");
+    scanf("%d",&todayMonth);
+
+    printf("Year: ");
+    scanf("%d",&todayYear);
+
+    printf("\nExpiry Warning Products:\n");
+
+        for(i = 0; i < count; i++) {
+    if(product[i].expYear < todayYear) {
+        printf("%-15s is EXPIRED\n", product[i].name);
+    }
+    else if(product[i].expYear == todayYear && product[i].expMonth < todayMonth) {
+        printf("%-15s is EXPIRED\n", product[i].name);
+    }
+    else if(product[i].expYear == todayYear && product[i].expMonth == todayMonth && product[i].expDay <= todayDay) {
+        printf("%-15s is EXPIRED\n", product[i].name);
+    }
+}
+
+}
