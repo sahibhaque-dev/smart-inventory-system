@@ -1,0 +1,615 @@
+#include<stdio.h>
+#include<string.h>
+
+struct Product
+{
+    int id;
+    char name[50];
+    char category[50];
+    float price;
+    int quantity;
+
+    int discount;
+
+    int expDay;
+    int expMonth;
+    int expYear;
+};
+
+struct Product product[100];
+
+int count=0;
+float totalSales=0;
+int userPoints=0;
+
+void saveData();
+void loadData();
+
+void adminMenu();
+void userMenu();
+
+void addProduct();
+void viewProduct();
+void updateStock();
+void deleteProduct();
+void lowStock();
+void salesReport();
+void expiryWarning();
+
+void buyProduct();
+void returnProduct();
+void searchProduct();
+void searchByCategory();
+
+int main()
+{
+
+    int choice;
+    char username[20],
+         password[20];
+
+    loadData();
+
+    while(1)
+    {
+
+        printf("\n===== Intelligent Inventory System =====\n");
+        printf("1.Admin Login\n");
+        printf("2.User Menu\n");
+        printf("3.Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d",&choice);
+
+        if(choice==1)
+        {
+
+            printf("Username: ");
+            scanf("%s",username);
+
+            printf("Password: ");
+            scanf("%s",password);
+
+            if(strcmp(username,"admin")==0 && strcmp(password,"1234")==0)
+            {
+                printf("Admin Login Successful\n");
+                adminMenu();
+            }
+            else
+            {
+                printf("Invalid Login\n");
+            }
+
+
+        }
+
+        else if(choice==2)
+        {
+            userMenu();
+        }
+
+        else if(choice==3)
+        {
+            printf("Exiting and saving Data\n");
+            saveData();
+
+            break;
+        }
+
+    }
+
+    return 0;
+}
+
+void adminMenu()
+{
+
+    int choice;
+
+    while(1)
+    {
+
+        printf("\t\n   <=== Admin Menu ===>\n\t");
+        printf("1.Add Product\n\t");
+        printf("2.View Product\n\t");
+        printf("3.Update Stock\n\t");
+        printf("4.Delete Product\n\t");
+        printf("5.Low Stock\n\t");
+        printf("6.Total Sales\n\t");
+        printf("7.Expiry Warning\n\t");
+        printf("8.Logout\n");
+
+
+        printf("Enter choice: ");
+        scanf("%d",&choice);
+
+        switch(choice)
+        {
+
+        case 1:
+            addProduct();
+            break;
+
+        case 2:
+            viewProduct();
+            break;
+
+        case 3:
+            updateStock();
+            break;
+
+        case 4:
+            deleteProduct();
+            break;
+
+        case 5:
+            lowStock();
+            break;
+
+        case 6:
+            salesReport();
+            break;
+
+            case 7: expiryWarning(); break;
+
+        case 8:
+            return;
+
+        default:
+            printf("Invalid Choice\n");
+        }
+
+    }
+
+}
+
+void userMenu()
+{
+
+    int choice;
+
+    while(1)
+    {
+
+        printf("\n=== User Menu ===\n");
+        printf("1.View Product\n");
+        printf("2.Search Product by ID\n");
+        printf("3.Search by Category\n");
+        printf("4.Sell Product\n");
+        printf("5.Return Product\n");
+        printf("6.View Points\n");
+        printf("7.Logout\n");
+
+        printf("Enter choice: ");
+        scanf("%d",&choice);
+
+        switch(choice)
+        {
+
+        case 1:
+            viewProduct();
+            break;
+
+        case 2:
+            searchProduct();
+            break;
+
+        case 3:
+            searchByCategory();
+            break;
+
+        case 4:
+            buyProduct();
+            break;
+
+        case 5:
+            returnProduct();
+            break;
+
+        case 6:
+            printf("Your Points: %d\n",userPoints);
+            break;
+
+        case 7:
+            return;
+
+        default:
+            printf("Invalid Choice\n");
+
+        }
+
+    }
+
+}
+
+void addProduct()
+{
+
+    printf("Enter ID: ");
+    scanf("%d",&product[count].id);
+
+    getchar();
+
+    printf("Product Name: ");
+    fgets(product[count].name,50,stdin);
+    product[count].name[strcspn(product[count].name,"\n")]='\0';
+
+
+    printf("Enter Category: ");
+    scanf("%s",product[count].category);
+
+    printf("Enter Price: ");
+    scanf("%f",&product[count].price);
+
+    printf("Enter Quantity: ");
+    scanf("%d",&product[count].quantity);
+
+    printf("Enter Discount (%%): ");
+    scanf("%d",&product[count].discount);
+
+    printf("Expiry Day: ");
+    scanf("%d",&product[count].expDay);
+
+    printf("Expiry Month: ");
+    scanf("%d",&product[count].expMonth);
+
+    printf("Expiry Year: ");
+    scanf("%d",&product[count].expYear);
+
+    count++;
+
+    saveData();
+
+    printf("\t<==Product Added Successfully==>\n");
+}
+
+void viewProduct()
+{
+
+    int i;
+
+    if(count==0)
+    {
+        printf("\t<==No Product Found==>\n");
+        return;
+    }
+   printf("%-7s %-20s %-12s %-8s %-6s %-5s %s\n","ID","Name","Category","Price","Disc%","Qty","Expiry");
+    printf("--------------------------------------------------------------------------\n");
+
+    for(i=0; i<count; i++)
+    {
+
+       printf("%-7d %-20s %-12s %-8.2f %-6d %-5d %d/%d/%d\n",
+product[i].id,
+product[i].name,
+product[i].category,
+product[i].price,
+product[i].discount,
+product[i].quantity,
+product[i].expDay,
+product[i].expMonth,
+product[i].expYear);
+
+    }
+
+}
+
+void expiryWarning()
+{
+    int i;
+    int todayDay, todayMonth, todayYear;
+
+    printf("Enter Today Date\n");
+    printf("Day: ");
+    scanf("%d",&todayDay);
+
+    printf("Month: ");
+    scanf("%d",&todayMonth);
+
+    printf("Year: ");
+    scanf("%d",&todayYear);
+
+    printf("\nExpiry Warning Products:\n");
+
+        for(i = 0; i < count; i++) {
+    if(product[i].expYear < todayYear) {
+        printf("%-15s is EXPIRED\n", product[i].name);
+    }
+    else if(product[i].expYear == todayYear && product[i].expMonth < todayMonth) {
+        printf("%-15s is EXPIRED\n", product[i].name);
+    }
+    else if(product[i].expYear == todayYear && product[i].expMonth == todayMonth && product[i].expDay <= todayDay) {
+        printf("%-15s is EXPIRED\n", product[i].name);
+    }
+}
+
+}
+
+void updateStock()
+{
+
+    int id,i,qty;
+
+    printf("Enter Product ID: ");
+    scanf("%d",&id);
+
+    for(i=0; i<count; i++)
+    {
+
+        if(product[i].id==id)
+        {
+
+            printf("Add Quantity: ");
+            scanf("%d",&qty);
+
+            product[i].quantity+=qty;
+
+            saveData();
+
+            printf("Stock Updated\n");
+            return;
+        }
+
+    }
+
+    printf("Product Not Found\n");
+
+}
+
+void deleteProduct()
+{
+
+    int id,i,j;
+
+    printf("Enter Product ID: ");
+    scanf("%d",&id);
+
+    for(i=0; i<count; i++)
+    {
+
+        if(product[i].id==id)
+        {
+
+            for(j=i; j<count-1; j++)
+            {
+                product[j]=product[j+1];
+            }
+
+            count--;
+
+            saveData();
+
+            printf("Product Deleted\n");
+            return;
+        }
+
+    }
+
+    printf("Product Not Found\n");
+
+}
+
+void lowStock()
+{
+
+    int i;
+
+    printf("\nLow Stock Products\n");
+
+    for(i=0; i<count; i++)
+    {
+
+        if(product[i].quantity<5)
+        {
+            printf("%s (%d left)\n",product[i].name,product[i].quantity);
+        }
+
+    }
+
+}
+
+void salesReport()
+{
+    printf("Total Sales: %.2f TK\n",totalSales);
+}
+
+void searchProduct()
+{
+
+    int id,i;
+
+    printf("Enter Product ID: ");
+    scanf("%d",&id);
+
+    for(i=0; i<count; i++)
+    {
+
+        if(product[i].id==id)
+        {
+
+            printf("Found: %s | Category: %s | Price %.2f | Stock %d | Disc%% %d |Expiry Date %d/%d/%d\n",
+                   product[i].name,
+                   product[i].category,
+                   product[i].price,
+                   product[i].quantity,
+                   product[i].discount,
+                   product[i].expDay,
+               product[i].expMonth,
+               product[i].expYear);
+
+            return;
+        }
+
+    }
+
+    printf("Product Not Found\n");
+
+}
+
+void searchByCategory()
+{
+
+    char key[50];
+    int i,found=0;
+
+    printf("Enter Category: ");
+    scanf("%s",key);
+
+    printf("\nProducts in %s Category:\n",key);
+
+    for(i=0; i<count; i++)
+    {
+
+        if(strcmp(product[i].category,key)==0)
+        {
+
+            printf("%d %s %.2f %d\n",
+                   product[i].id,
+                   product[i].name,
+                   product[i].price,
+                   product[i].quantity);
+
+            found=1;
+        }
+
+    }
+
+    if(found==0)
+    {
+        printf("No Product Found in this Category\n");
+    }
+
+}
+
+void buyProduct()
+{
+
+    int id,i,qty;
+    float total;
+    float discountAmount;
+
+    printf("Enter Product ID: ");
+    scanf("%d",&id);
+
+    printf("Enter Quantity: ");
+    scanf("%d",&qty);
+
+    for(i=0; i<count; i++)
+    {
+
+        if(product[i].id==id)
+        {
+
+            if(product[i].quantity>=qty)
+            {
+
+                total=product[i].price*qty;
+
+                printf("Product Discount: %d%%\n",product[i].discount);  // small change ( pore remove kore dibo )
+
+
+                   discountAmount = total * product[i].discount / 100;  // small change ( pore remove kore dibo )
+
+
+                    total = total - discountAmount;   // small change ( pore remove kore dibo )
+
+                product[i].quantity-=qty;
+
+                    printf("Discount Applied: %.2f\n",discountAmount);  // small change ( pore remove kore dibo )
+
+                if(total>=500)
+                {
+                    userPoints+=1000;
+                    printf("You Got 1000 Points!\n");
+                }
+
+                totalSales+=total;
+
+                printf("Total Price: %.2f\n",total);
+
+                saveData();
+
+                return;
+
+            }
+            else
+            {
+                printf("Not Enough Stock\n");
+                return;
+            }
+
+        }
+
+    }
+
+    printf("Product Not Found\n");
+
+}
+
+void returnProduct()
+{
+
+    int id,i,qty;
+
+    printf("Enter Product ID: ");
+    scanf("%d",&id);
+
+    printf("Return Quantity: ");
+    scanf("%d",&qty);
+
+    for(i=0; i<count; i++)
+    {
+
+        if(product[i].id==id)
+        {
+
+            product[i].quantity+=qty;
+
+            saveData();
+
+            printf("Return Successful\n");
+            return;
+
+        }
+
+    }
+
+    printf("Product Not Found\n");
+
+}
+
+void saveData()
+{
+
+    FILE *fp=fopen("inventory.dat","wb");
+
+    if(fp==NULL) return;
+
+    fwrite(&count,sizeof(int),1,fp);
+    fwrite(&totalSales,sizeof(float),1,fp);
+    fwrite(&userPoints,sizeof(int),1,fp);
+
+    fwrite(product,sizeof(struct Product),count,fp);
+
+    fclose(fp);
+
+}
+
+void loadData()
+{
+
+    FILE *fp=fopen("inventory.dat","rb");
+
+    if(fp==NULL) return;
+
+    fread(&count,sizeof(int),1,fp);
+    fread(&totalSales,sizeof(float),1,fp);
+    fread(&userPoints,sizeof(int),1,fp);
+
+    fread(product,sizeof(struct Product),count,fp);
+
+    fclose(fp);
+
+}
+
+
