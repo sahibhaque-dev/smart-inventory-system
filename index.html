@@ -1154,7 +1154,7 @@ function toggleTheme() {
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
 }
 
-// page load এ theme মনে রাখবে
+// page laod themeee
 if (localStorage.getItem('theme') === 'light') {
   document.body.classList.add('light-mode');
   document.querySelector('[onclick="toggleTheme()"]') && 
