@@ -1478,7 +1478,7 @@ function renderProducts() {
       const low = p.quantity < 5;
       const status = expired ? '<span class="badge badge-red">Expired</span>' :
                      low ? '<span class="badge badge-warn">Low Stock</span>' :
-                     '<span class="badge badge-green">Active</span>';
+                     '<span class="badge badge-green">Available</span>';
       const isAdmin = currentRole === 'admin';
       return `
         <tr>
@@ -1746,6 +1746,7 @@ const due = change < 0 ? Math.abs(change) : 0;
   saveData();
   cart = [];
   renderCart();
+  document.getElementById('paidAmount').value = '';//new line for remove all input newwwwwww 5/26/26
 }
 
 function showInvoice(invNo, items, subtotal, discTotal, grand, paid, change) {
@@ -2001,7 +2002,7 @@ function doSearch(type) {
     const expired = isExpired(p, now);
     res.innerHTML = `
       <div class="panel" style="max-width:480px">
-        <div class="panel-header"><h2>${p.name}</h2><span class="badge ${expired?'badge-red':'badge-green'}">${expired?'EXPIRED':'Active'}</span></div>
+        <div class="panel-header"><h2>${p.name}</h2><span class="badge ${expired?'badge-red':'badge-green'}">${expired?'EXPIRED':'Available'}</span></div>
         <div style="padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
           <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">ID</div><div class="mono">#${p.id}</div></div>
           <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">Category</div><span class="badge badge-blue">${p.category}</span></div>
